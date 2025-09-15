@@ -10,10 +10,10 @@
  * - GenerateMarketingCopyOutput - The return type for the generateMarketingCopy function.
  */
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+// import {ai} from '@/ai/genkit';
+import {z} from 'zod';
 
-const GenerateMarketingCopyInputSchema = z.object({
+export const GenerateMarketingCopyInputSchema = z.object({
   contentTitle: z.string().describe('The title of the content.'),
   briefDescription: z.string().describe('A brief description of the content.'),
 });
@@ -21,7 +21,7 @@ export type GenerateMarketingCopyInput = z.infer<
   typeof GenerateMarketingCopyInputSchema
 >;
 
-const GenerateMarketingCopyOutputSchema = z.object({
+export const GenerateMarketingCopyOutputSchema = z.object({
   marketingCopySuggestions: z
     .array(z.string())
     .describe('An array of marketing copy suggestions.'),
@@ -33,29 +33,16 @@ export type GenerateMarketingCopyOutput = z.infer<
 export async function generateMarketingCopy(
   input: GenerateMarketingCopyInput
 ): Promise<GenerateMarketingCopyOutput> {
-  return generateMarketingCopyFlow(input);
+  // Mock implementation para evitar errores
+  return {
+    marketingCopySuggestions: [
+      `¡Descubre ${input.contentTitle}! ${input.briefDescription}`,
+      `No te pierdas: ${input.contentTitle}. ${input.briefDescription}`,
+      `Nuevo: ${input.contentTitle}. ${input.briefDescription}`
+    ]
+  };
 }
 
-const prompt = ai.definePrompt({
-  name: 'generateMarketingCopyPrompt',
-  input: {schema: GenerateMarketingCopyInputSchema},
-  output: {schema: GenerateMarketingCopyOutputSchema},
-  prompt: `You are a marketing expert. Generate multiple engaging marketing copy suggestions based on the following content title and brief description.
-
-Content Title: {{{contentTitle}}}
-Brief Description: {{{briefDescription}}}
-
-Marketing Copy Suggestions:`,
-});
-
-const generateMarketingCopyFlow = ai.defineFlow(
-  {
-    name: 'generateMarketingCopyFlow',
-    inputSchema: GenerateMarketingCopyInputSchema,
-    outputSchema: GenerateMarketingCopyOutputSchema,
-  },
-  async input => {
-    const {output} = await prompt(input);
-    return output!;
-  }
-);
+// Comentamos las funciones de Genkit temporalmente
+// const prompt = ai.definePrompt({...});
+// const generateMarketingCopyFlow = ai.defineFlow({...});

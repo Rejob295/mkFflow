@@ -8,10 +8,10 @@
  * - SuggestContentIdeasOutput - The return type for the suggestContentIdeas function.
  */
 
-import {ai} from '@/ai/genkit';
-import {z} from 'genkit';
+// import {ai} from '@/ai/genkit';
+import {z} from 'zod';
 
-const SuggestContentIdeasInputSchema = z.object({
+export const SuggestContentIdeasInputSchema = z.object({
   topic: z
     .string()
     .optional()
@@ -32,7 +32,7 @@ const SuggestContentIdeasInputSchema = z.object({
 
 export type SuggestContentIdeasInput = z.infer<typeof SuggestContentIdeasInputSchema>;
 
-const SuggestContentIdeasOutputSchema = z.object({
+export const SuggestContentIdeasOutputSchema = z.object({
   ideas: z.array(
     z.string().describe('A content idea based on the provided inputs.')
   ).describe('Array of content ideas'),
@@ -41,32 +41,16 @@ const SuggestContentIdeasOutputSchema = z.object({
 export type SuggestContentIdeasOutput = z.infer<typeof SuggestContentIdeasOutputSchema>;
 
 export async function suggestContentIdeas(input: SuggestContentIdeasInput): Promise<SuggestContentIdeasOutput> {
-  return suggestContentIdeasFlow(input);
+  // Mock implementation
+  const mockIdeas = [
+    `Ideas sobre ${input.topic || 'marketing digital'}`,
+    `Tendencias actuales: ${input.trendingTopics || 'redes sociales'}`,
+    `Eventos de temporada: ${input.seasonalEvents || 'festividades'}`,
+    `Contenido sobre ${input.keyword || 'estrategias'}`,
+    `Tips y consejos para ${input.topic || 'tu audiencia'}`
+  ];
+  
+  return { ideas: mockIdeas };
 }
 
-const prompt = ai.definePrompt({
-  name: 'suggestContentIdeasPrompt',
-  input: {schema: SuggestContentIdeasInputSchema},
-  output: {schema: SuggestContentIdeasOutputSchema},
-  prompt: `You are a marketing content creation expert. Your task is to generate content ideas based on the provided information.
-
-  Here are some trending topics: {{{trendingTopics}}}
-  Here are some seasonal events to consider: {{{seasonalEvents}}}
-  Here is a specific topic: {{{topic}}}
-  Here is a keyword to focus on: {{{keyword}}}
-
-  Please provide 5 distinct content ideas that are engaging and relevant to the target audience.
-  Ideas:`, 
-});
-
-const suggestContentIdeasFlow = ai.defineFlow(
-  {
-    name: 'suggestContentIdeasFlow',
-    inputSchema: SuggestContentIdeasInputSchema,
-    outputSchema: SuggestContentIdeasOutputSchema,
-  },
-  async input => {
-    const {output} = await prompt(input);
-    return output!;
-  }
-);
+// Comentamos las funciones de Genkit temporalmente

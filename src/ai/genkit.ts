@@ -1,7 +1,9 @@
-import {genkit} from 'genkit';
-import {googleAI} from '@genkit-ai/googleai';
+// Comentamos temporalmente las importaciones de Genkit para evitar errores
+// import {genkit} from 'genkit';
+// import {googleAI} from '@genkit-ai/googleai';
 
-export const ai = genkit({
-  plugins: [googleAI()],
-  model: 'googleai/gemini-2.5-flash',
-});
+// Exportamos un objeto mock para evitar errores de compilación
+export const ai = {
+  definePrompt: () => () => ({ output: null }),
+  defineFlow: () => () => ({ output: null })
+};
